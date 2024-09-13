@@ -236,6 +236,10 @@ if [ -n "${CONFIG_KALLSYMS}" ]; then
 	fi
 fi
 
+if [ -f "${srctree}/link-vmlinux-preparation.sh" ]; then
+    "${srctree}/link-vmlinux-preparation.sh"
+fi
+
 if [ -n "${CONFIG_CRYPTO_FIPS}" ]; then
 	echo '  FIPS : Generating hmac of crypto and updating vmlinux... '
 	${CONFIG_SHELL} "${srctree}/scripts/fips_crypto_hmac.sh" "${objtree}/vmlinux" "${objtree}/System.map"
