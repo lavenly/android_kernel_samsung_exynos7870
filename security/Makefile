@@ -35,7 +35,3 @@ obj-$(CONFIG_SDP) += sdp/built-in.o
 # Kbuild should always enter proca/gaf because gaf should be always built
 subdir-y += proca/gaf
 obj-y    += proca/gaf/
-
-# TIMA uevent
-#ICCC
-obj-$(CONFIG_TZ_ICCC)	  += tz_iccc/
