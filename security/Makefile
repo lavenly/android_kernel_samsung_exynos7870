@@ -51,6 +51,3 @@ obj-y    += proca/gaf/
 # TIMA uevent
 #ICCC
 obj-$(CONFIG_TZ_ICCC)	  += tz_iccc/
-
-# MST driver
-obj-$(CONFIG_MST_LDO)	  += mstdrv/
