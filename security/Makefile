@@ -31,7 +31,3 @@ obj-$(CONFIG_INTEGRITY)			+= integrity/
 # Knox SDP
 obj-$(CONFIG_SDP) += sdp/
 obj-$(CONFIG_SDP) += sdp/built-in.o
-
-# Kbuild should always enter proca/gaf because gaf should be always built
-subdir-y += proca/gaf
-obj-y    += proca/gaf/
