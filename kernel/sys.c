@@ -64,10 +64,6 @@
 #include <asm/io.h>
 #include <asm/unistd.h>
 
-#ifdef CONFIG_SECURITY_DEFEX
-#include <linux/defex.h>
-#endif
-
 #ifndef SET_UNALIGN_CTL
 # define SET_UNALIGN_CTL(a, b)	(-EINVAL)
 #endif
@@ -440,7 +436,7 @@ SYSCALL_DEFINE1(setgid, gid_t, gid)
 	struct cred *new;
 	int retval;
 	kgid_t kgid;
-	
+
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(gid == 0)
 	{
@@ -847,11 +843,6 @@ SYSCALL_DEFINE1(setfsuid, uid_t, uid)
 	if (!uid_valid(kuid))
 		return old_fsuid;
 
-#ifdef CONFIG_SECURITY_DEFEX
-	if (task_defex_enforce(current, NULL, -__NR_setfsuid))
-		return old_fsuid;
-#endif
-
 	new = prepare_creds();
 	if (!new)
 		return old_fsuid;
@@ -890,11 +881,6 @@ SYSCALL_DEFINE1(setfsgid, gid_t, gid)
 	kgid = make_kgid(old->user_ns, gid);
 	if (!gid_valid(kgid))
 		return old_fsgid;
-
-#ifdef CONFIG_SECURITY_DEFEX
-	if (task_defex_enforce(current, NULL, -__NR_setfsgid))
-		return old_fsgid;
-#endif
 
 	new = prepare_creds();
 	if (!new)
