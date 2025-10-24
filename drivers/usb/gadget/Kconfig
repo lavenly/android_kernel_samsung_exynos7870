@@ -183,7 +183,7 @@ config USB_F_FS
 
 config USB_F_UAC1
 	tristate
- 
+
 config USB_F_UAC2
 	tristate
 
@@ -473,7 +473,6 @@ config USB_ANDROID_SAMSUNG_MTP
 config USB_F_CONN_GADGET_NDOP
     bool "Conn gadget that do not support DexLive"
 	depends on USB_G_ANDROID
-	depends on ANDROID_MAJOR_VERSION >= "q"
 	help
 	  Next SideSync
 
@@ -503,14 +502,14 @@ config USB_NCM_SUPPORT_MTU_CHANGE
 	   for samsung gadget driver.
 	   If you enable this option,
 	   NCM MTU Change will be able to be used.
-	  
+
 
 config USB_RNDIS_MULTIPACKET
 	boolean "Samsung Rndis Multi Packet support"
 	depends on USB_G_ANDROID
 	help
 		Rndis Multipacket Support.
-		
+
 config USB_ANDROID_SAMSUNG_CCR_PROTOCOL
 	boolean "Samsung USB CCR Protocol support"
 	depends on USB_G_ANDROID

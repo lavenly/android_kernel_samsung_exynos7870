@@ -237,9 +237,9 @@ static inline void inode_unlock(struct inode *inode)
  *
  * Please refer to the comment for waitqueue_active.
  */
-static inline bool wq_has_sleeper(wait_queue_head_t *wq) 
+static inline bool wq_has_sleeper(wait_queue_head_t *wq)
 {
-	/*   
+	/*
 	 * We need to be sure we are in sync with the
 	 * add_wait_queue modifications to the wait queue.
 	 *
@@ -271,8 +271,8 @@ static inline struct timespec current_time(struct inode *inode)
 
 	if (unlikely(!inode->i_sb)) {
 		WARN(1, "current_time() called with uninitialized super_block in the inode");
-		return now; 
-	}    
+		return now;
+	}
 
 	return timespec_trunc(now, inode->i_sb->s_time_gran);
 }
@@ -1975,11 +1975,6 @@ static inline bool f2fs_android_claim_sec_r_blocks(unsigned long flags) {
 	if (flags & F2FS_CORE_FILE_FL)
 		return true;
 
-#if ANDROID_VERSION < 90000
-	if (in_group_p(AID_USE_SEC_RESERVED))
-		return true;
-#endif
-
 	return false;
 }
 
@@ -2558,14 +2553,14 @@ enum F2FS_SEC_FUA_MODE {
 #define __f2fs_is_cold_node(page)			\
 	(le32_to_cpu(F2FS_NODE(page)->footer.flag) & (1 << COLD_BIT_SHIFT))
 
-static inline void f2fs_cond_set_fua(struct f2fs_io_info *fio) 
+static inline void f2fs_cond_set_fua(struct f2fs_io_info *fio)
 {
-	if (!fio->sbi->s_sec_cond_fua_mode) 
+	if (!fio->sbi->s_sec_cond_fua_mode)
 		return;
 
 	if (fio->type == META)
 		fio->op_flags |= REQ_FLUSH | REQ_FUA;
-	else if ((fio->page && IS_NOQUOTA(fio->page->mapping->host)) || 
+	else if ((fio->page && IS_NOQUOTA(fio->page->mapping->host)) ||
 			(fio->ino == f2fs_qf_ino(fio->sbi->sb, USRQUOTA) ||
 			fio->ino == f2fs_qf_ino(fio->sbi->sb, GRPQUOTA) ||
 			fio->ino == f2fs_qf_ino(fio->sbi->sb, PRJQUOTA)))

@@ -50,10 +50,8 @@ static void init_sensorlist(struct ssp_data *data)
 		SENSOR_INFO_PROXIMITY_RAW,
 		SENSOR_INFO_GEOMAGNETIC_POWER,
 		SENSOR_INFO_INTERRUPT_GYRO,
-#if ANDROID_VERSION >= 80000
 		SENSOR_INFO_SCONTEXT,
 		SENSOR_INFO_UNKNOWN,
-#endif
 	};
 
 	memcpy(&data->info, sensorinfo, sizeof(data->info));
@@ -255,7 +253,7 @@ void report_scontext_notice_data(struct ssp_data *data, char notice)
 	}
 
 	report_scontext_data(data, notice_buf, len);
-	
+
 	if (notice == SCONTEXT_AP_STATUS_WAKEUP) {
 		ssp_infof("wake up");
 	} else if (notice == SCONTEXT_AP_STATUS_SLEEP) {

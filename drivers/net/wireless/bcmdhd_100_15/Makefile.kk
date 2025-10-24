@@ -339,16 +339,7 @@ ifeq ($(BUS_IFACE_PCIE),y)
 DHDCFLAGS += -DDHD_4WAYM4_FAIL_DISCONNECT
 endif
 
-# Android Version Check from Platform source
-ifneq ($(ANDROID_VERSION),)
-MAJOR_VERSION := $(shell echo $(ANDROID_VERSION) | rev | cut -c 5- | rev)
-DHDCFLAGS += -DANDROID_PLATFORM_VERSION=$(MAJOR_VERSION)
-else
-ifneq ($(PLATFORM_VERSION),)
-MAJOR_VERSION := $(shell echo $(PLATFORM_VERSION) | cut -d "." -f 1)
-DHDCFLAGS += -DANDROID_PLATFORM_VERSION=$(MAJOR_VERSION)
-endif
-endif
+DHDCFLAGS += -DANDROID_PLATFORM_VERSION=10
 
 # Change Dump path by Android Global DE Policy
 ifeq ($(CONFIG_WLAN_VENDOR_DUMP_ENABLE),y)
@@ -1169,13 +1160,8 @@ ifeq ($(filter y,$(CONFIG_BCM43454) $(CONFIG_BCM43455)), y)
   DHDCFLAGS += -DDHD_SUPPORT_QA_6
 endif
 
-ifneq ($(PLATFORM_VERSION),)
-# Android O OS use below features
-ifeq ($(shell expr $(MAJOR_VERSION) \>= 8),1)
-  # Use single nvram file
-  DHDCFLAGS += -DDHD_USE_SINGLE_NVRAM_FILE
-endif
-endif
+# Use single nvram file
+DHDCFLAGS += -DDHD_USE_SINGLE_NVRAM_FILE
 
 ifneq ($(filter y,$(CONFIG_BCM43455) $(CONFIG_BCM43456)),$(filter m,$(CONFIG_BCM43455) $(CONFIG_BCM43456)))
   # Enable Firmware Coredump
@@ -1358,13 +1344,8 @@ endif
   DHDCFLAGS :=$(filter-out -DSUPPORT_P2P_GO_PS,$(DHDCFLAGS))
 # Generate .softap.info
   DHDCFLAGS += -DGEN_SOFTAP_INFO_FILE
-ifneq ($(PLATFORM_VERSION),)
-# Android O OS use below features
-ifeq ($(shell expr $(MAJOR_VERSION) \>= 8),1)
 # Use single nvram file
- DHDCFLAGS += -DDHD_USE_SINGLE_NVRAM_FILE
-endif
-endif
+  DHDCFLAGS += -DDHD_USE_SINGLE_NVRAM_FILE
 endif
 
 ifneq ($(CONFIG_BCM43012),)

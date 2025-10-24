@@ -13,12 +13,6 @@
 #
 
 
-config DDK_VERSION_OS
-	string "version"
-	default ANDROID_MAJOR_VERSION
-	help
-	  Android OS major version
-
 menuconfig MALI_T83X
 	tristate "Mali-T83X support"
 	default y
@@ -30,11 +24,7 @@ menuconfig MALI_T83X
 choice
 	prompt "version Configuration"
 	depends on MALI_T83X
-	default MALI_R12P0 if DDK_VERSION_OS = "m"
-	default MALI_R15P0 if DDK_VERSION_OS = "n"
-	default MALI_R22P0 if DDK_VERSION_OS = "o"
-	default MALI_R28P0 if DDK_VERSION_OS = "p"
-	default MALI_R29P0 if DDK_VERSION_OS = "q"
+	default MALI_R29P0
 	help
 	  Select the gpu support version.
 
@@ -57,7 +47,7 @@ config MALI_R22P0
 config MALI_R28P0
 	depends on MALI_T83X
 	bool "r28p0 driver"
-	
+
 config MALI_R29P0
 	depends on MALI_T83X
 	bool "r29p0 driver"
