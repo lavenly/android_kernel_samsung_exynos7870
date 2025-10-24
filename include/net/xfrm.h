@@ -696,51 +696,6 @@ struct xfrm_spi_skb_cb {
 
 #define XFRM_SPI_SKB_CB(__skb) ((struct xfrm_spi_skb_cb *)&((__skb)->cb[0]))
 
-// [ SEC_SELINUX_PORTING_COMMON - remove AUDIT_MAC_IPSEC_EVENT audit log, it conflict with security notification
-#if 0 // #ifdef CONFIG_AUDITSYSCALL
-static inline struct audit_buffer *xfrm_audit_start(const char *op)
-{
-	struct audit_buffer *audit_buf = NULL;
-
-	if (audit_enabled == 0)
-		return NULL;
-	audit_buf = audit_log_start(current->audit_context, GFP_ATOMIC,
-				    AUDIT_MAC_IPSEC_EVENT);
-	if (audit_buf == NULL)
-		return NULL;
-	audit_log_format(audit_buf, "op=%s", op);
-	return audit_buf;
-}
-
-static inline void xfrm_audit_helper_usrinfo(bool task_valid,
-					     struct audit_buffer *audit_buf)
-{
-	const unsigned int auid = from_kuid(&init_user_ns, task_valid ?
-					    audit_get_loginuid(current) :
-					    INVALID_UID);
-	const unsigned int ses = task_valid ? audit_get_sessionid(current) :
-		(unsigned int) -1;
-
-	audit_log_format(audit_buf, " auid=%u ses=%u", auid, ses);
-	audit_log_task_context(audit_buf);
-}
-
-void xfrm_audit_policy_add(struct xfrm_policy *xp, int result, bool task_valid);
-void xfrm_audit_policy_delete(struct xfrm_policy *xp, int result,
-			      bool task_valid);
-void xfrm_audit_state_add(struct xfrm_state *x, int result, bool task_valid);
-void xfrm_audit_state_delete(struct xfrm_state *x, int result, bool task_valid);
-void xfrm_audit_state_replay_overflow(struct xfrm_state *x,
-				      struct sk_buff *skb);
-void xfrm_audit_state_replay(struct xfrm_state *x, struct sk_buff *skb,
-			     __be32 net_seq);
-void xfrm_audit_state_notfound_simple(struct sk_buff *skb, u16 family);
-void xfrm_audit_state_notfound(struct sk_buff *skb, u16 family, __be32 net_spi,
-			       __be32 net_seq);
-void xfrm_audit_state_icvfail(struct xfrm_state *x, struct sk_buff *skb,
-			      u8 proto);
-#else
-
 static inline void xfrm_audit_policy_add(struct xfrm_policy *xp, int result,
 					 bool task_valid)
 {
@@ -785,8 +740,6 @@ static inline void xfrm_audit_state_icvfail(struct xfrm_state *x,
 				     struct sk_buff *skb, u8 proto)
 {
 }
-#endif /* CONFIG_AUDITSYSCALL */
-// ] SEC_SELINUX_PORTING_COMMON - remove AUDIT_MAC_IPSEC_EVENT audit log, it conflict with security notification
 
 static inline void xfrm_pol_hold(struct xfrm_policy *policy)
 {
@@ -1169,12 +1122,12 @@ void xfrm_garbage_collect(struct net *net);
 
 static inline void xfrm_sk_free_policy(struct sock *sk) {}
 static inline int xfrm_sk_clone_policy(struct sock *sk) { return 0; }
-static inline int xfrm6_route_forward(struct sk_buff *skb) { return 1; }  
-static inline int xfrm4_route_forward(struct sk_buff *skb) { return 1; } 
+static inline int xfrm6_route_forward(struct sk_buff *skb) { return 1; }
+static inline int xfrm4_route_forward(struct sk_buff *skb) { return 1; }
 static inline int xfrm6_policy_check(struct sock *sk, int dir, struct sk_buff *skb)
-{ 
-	return 1; 
-} 
+{
+	return 1;
+}
 static inline int xfrm4_policy_check(struct sock *sk, int dir, struct sk_buff *skb)
 {
 	return 1;
@@ -1261,7 +1214,7 @@ __xfrm6_state_addr_check(const struct xfrm_state *x,
 {
 	if (ipv6_addr_equal((struct in6_addr *)daddr, (struct in6_addr *)&x->id.daddr) &&
 	    (ipv6_addr_equal((struct in6_addr *)saddr, (struct in6_addr *)&x->props.saddr) ||
-	     ipv6_addr_any((struct in6_addr *)saddr) || 
+	     ipv6_addr_any((struct in6_addr *)saddr) ||
 	     ipv6_addr_any((struct in6_addr *)&x->props.saddr)))
 		return 1;
 	return 0;
@@ -1562,7 +1515,7 @@ int xfrm_user_policy(struct sock *sk, int optname,
 static inline int xfrm_user_policy(struct sock *sk, int optname, u8 __user *optval, int optlen)
 {
  	return -ENOPROTOOPT;
-} 
+}
 
 static inline int xfrm4_udp_encap_rcv(struct sock *sk, struct sk_buff *skb)
 {
