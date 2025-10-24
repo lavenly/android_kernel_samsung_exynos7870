@@ -111,7 +111,7 @@ static DEFINE_MUTEX(selinux_sdcardfs_lock);
 
 #ifdef CONFIG_SECURITY_SELINUX_DEVELOP
 // [ SEC_SELINUX_PORTING_COMMON
-#if defined(CONFIG_ALWAYS_ENFORCE) && defined(CONFIG_RKP_KDP)
+#if defined(CONFIG_ALWAYS_ENFORCE)
 RKP_RO_AREA int selinux_enforcing;
 #else
 int selinux_enforcing;
@@ -2973,15 +2973,15 @@ static int selinux_inode_permission(struct inode *inode, int mask)
 		int count = 5;
 
 		while(count-- > 0) {
-			printk(KERN_ERR "SELinux : inode->i_security is not initialized. waiting...(%d/5)\n", 5-count); 
+			printk(KERN_ERR "SELinux : inode->i_security is not initialized. waiting...(%d/5)\n", 5-count);
 			udelay(500);
 			if(isec->initialized == 1) {
-				printk(KERN_ERR "SELinux : inode->i_security is INITIALIZED.\n"); 
+				printk(KERN_ERR "SELinux : inode->i_security is INITIALIZED.\n");
 				break;
 			}
 		}
 		if(isec->initialized != 1) {
-			printk(KERN_ERR "SELinux : inode->i_security is not initialized. not fixed.\n"); 
+			printk(KERN_ERR "SELinux : inode->i_security is not initialized. not fixed.\n");
 		}
 	}
 // ] SEC_SELINUX_PORTING_COMMON

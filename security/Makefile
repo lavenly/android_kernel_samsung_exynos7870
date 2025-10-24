@@ -48,8 +48,7 @@ obj-$(CONFIG_PROCA)		+= proca/
 subdir-y += proca/gaf
 obj-y    += proca/gaf/
 
-# TIMA uevent 
-obj-$(CONFIG_TIMA)     += tima_uevent/tima_uevent.o
+# TIMA uevent
 #ICCC
 obj-$(CONFIG_TZ_ICCC)	  += tz_iccc/
 
