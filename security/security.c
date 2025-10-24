@@ -734,9 +734,6 @@ int security_file_alloc(struct file *file)
 void security_file_free(struct file *file)
 {
 	security_ops->file_free_security(file);
-#ifdef CONFIG_PROCA
-	proca_compat_file_free_security_hook(file);
-#endif
 }
 
 int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
@@ -856,9 +853,6 @@ void security_task_free(struct task_struct *task)
 #endif
 	security_ops->task_free(task);
 	five_task_free(task);
-#ifdef CONFIG_PROCA
-	proca_compat_task_free_hook(task);
-#endif
 }
 
 int security_cred_alloc_blank(struct cred *cred, gfp_t gfp)

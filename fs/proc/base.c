@@ -2115,7 +2115,7 @@ out:
 	return -ENOENT;
 }
 
-static struct dentry *proc_pident_lookup(struct inode *dir, 
+static struct dentry *proc_pident_lookup(struct inode *dir,
 					 struct dentry *dentry,
 					 const struct pid_entry *ents,
 					 unsigned int nents)
@@ -2260,7 +2260,7 @@ static const struct pid_entry attr_dir_stuff[] = {
 
 static int proc_attr_dir_readdir(struct file *file, struct dir_context *ctx)
 {
-	return proc_pident_readdir(file, ctx, 
+	return proc_pident_readdir(file, ctx,
 				   attr_dir_stuff, ARRAY_SIZE(attr_dir_stuff));
 }
 
@@ -2641,45 +2641,11 @@ static int proc_integrity_reset_file(struct seq_file *m,
 	return 0;
 }
 
-#ifdef CONFIG_PROCA_DEBUG
-static int proc_get_proca_cert(struct seq_file *m,
-		struct pid_namespace *ns, struct pid *pid,
-		struct task_struct *task)
-{
-	const char *cert;
-	size_t cert_size;
-
-	if (!proca_get_task_cert(task, &cert, &cert_size)) {
-		size_t remaining_len;
-		char *buffer = NULL;
-		size_t data_len = cert_size * 2;
-
-		seq_printf(m, "%zu\n", data_len);
-		remaining_len = seq_get_buf(m, &buffer);
-
-		if (data_len && remaining_len > 1) {
-			size_t size = min(data_len, remaining_len);
-
-			bin2hex(buffer, cert, size / 2);
-			seq_commit(m, size);
-			seq_putc(m, '\n');
-		}
-	} else {
-		seq_printf(m, "%d\n", -1);
-	}
-
-	return 0;
-}
-#endif
-
 static const struct pid_entry integrity_dir_stuff[] = {
 	ONE("value", S_IRUGO, proc_integrity_value_read),
 	ONE("label", S_IRUGO, proc_integrity_label_read),
 	ONE("reset_cause", S_IRUGO, proc_integrity_reset_cause),
 	ONE("reset_file", S_IRUGO, proc_integrity_reset_file),
-#ifdef CONFIG_PROCA_DEBUG
-	ONE("proca_certificate", S_IRUGO, proc_get_proca_cert),
-#endif
 };
 
 static int
