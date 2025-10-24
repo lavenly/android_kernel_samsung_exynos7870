@@ -228,16 +228,16 @@ void f2fs_set_sb_extra_flag(struct f2fs_sb_info *sbi, int flag)
 	struct f2fs_sb_extra_flag_blk *extra_blk;
 
 	if (extra_flag_blk_no < 2) {
-		// 0 -> SB 0, 1 -> SB 1, 
+		// 0 -> SB 0, 1 -> SB 1,
 		// 2 or more : RSVD
-		f2fs_msg(sbi->sb, KERN_WARNING, 
+		f2fs_msg(sbi->sb, KERN_WARNING,
 				"extra_flag: No free blks for extra flags");
 		return;
 	}
 
 	bh = sb_bread(sbi->sb, (sector_t)extra_flag_blk_no);
 	if(!bh) {
-		f2fs_msg(sbi->sb, KERN_WARNING, 
+		f2fs_msg(sbi->sb, KERN_WARNING,
 				"extra_flag: Fail to allocate buffer_head");
 		return;
 	}
@@ -247,18 +247,18 @@ void f2fs_set_sb_extra_flag(struct f2fs_sb_info *sbi, int flag)
 
 	switch(flag) {
 	case F2FS_SEC_EXTRA_FSCK_MAGIC:
-		if (extra_blk->need_fsck == 
+		if (extra_blk->need_fsck ==
 				cpu_to_le32(F2FS_SEC_EXTRA_FSCK_MAGIC))
 			goto out_unlock;
 
 		extra_blk->need_fsck = cpu_to_le32(F2FS_SEC_EXTRA_FSCK_MAGIC);
 		break;
 	default:
-		f2fs_msg(sbi->sb, KERN_WARNING, 
+		f2fs_msg(sbi->sb, KERN_WARNING,
 				"extra_flag: Undefined flag - %x", flag);
 		goto out_unlock;
 	}
-	
+
 	set_buffer_uptodate(bh);
 	set_buffer_dirty(bh);
 	unlock_buffer(bh);
@@ -286,14 +286,14 @@ void f2fs_get_fsck_stat(struct f2fs_sb_info *sbi)
 	struct f2fs_sb_extra_flag_blk *extra_blk;
 
 	if (extra_flag_blk_no < 2) {
-		f2fs_msg(sbi->sb, KERN_WARNING, 
+		f2fs_msg(sbi->sb, KERN_WARNING,
 				"extra_flag: No free blks for extra flags");
 		return;
 	}
 
 	bh = sb_bread(sbi->sb, (sector_t)extra_flag_blk_no);
 	if (!bh) {
-		f2fs_msg(sbi->sb, KERN_WARNING, 
+		f2fs_msg(sbi->sb, KERN_WARNING,
 				"extra_flag: Fail to allocate buffer_head");
 		return;
 	}
@@ -3370,9 +3370,6 @@ try_onemore:
 	sb->s_time_gran = 1;
 	sb->s_flags = (sb->s_flags & ~MS_POSIXACL) |
 		(test_opt(sbi, POSIX_ACL) ? MS_POSIXACL : 0);
-#ifdef CONFIG_FIVE
-	sb->s_flags |= MS_I_VERSION;
-#endif
 	memcpy(sb->s_uuid, raw_super->uuid, sizeof(raw_super->uuid));
 	/* FIXME: no cgroup support */
 	/* sb->s_iflags |= SB_I_CGROUPWB; */
@@ -3850,4 +3847,3 @@ module_exit(exit_f2fs_fs)
 MODULE_AUTHOR("Samsung Electronics's Praesto Team");
 MODULE_DESCRIPTION("Flash Friendly File System");
 MODULE_LICENSE("GPL");
-
